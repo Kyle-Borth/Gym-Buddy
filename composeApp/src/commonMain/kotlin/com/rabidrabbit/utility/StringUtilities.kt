@@ -1,7 +1,6 @@
 package com.rabidrabbit.utility
 
 import kotlinx.datetime.Clock
-import kotlinx.datetime.IllegalTimeZoneException
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
@@ -27,27 +26,18 @@ object StringUtilities {
         return localDateTime.format(format)
     }
 
-    //TODO Covert from military time to am/pm time
-    fun currentTimeAt(location: String) : String? {
+    fun currentTime(zone: TimeZone): String {
         val format = LocalTime.Format {
-            hour()
+            amPmHour()
             char(':')
             minute()
-            char(':')
-            second()
+            amPmMarker("am", "pm")
         }
 
-        return try {
-            val now = Clock.System.now()
-            val zone = TimeZone.of(location)
-            val localTime = now.toLocalDateTime(zone).time
+        val time = Clock.System.now()
+        val localTime = time.toLocalDateTime(zone).time
 
-            localTime.format(format)
-        }
-        catch (itze: IllegalTimeZoneException) {
-            //TODO Figure out how to log
-            null
-        }
+        return localTime.format(format)
     }
 
 }
