@@ -11,7 +11,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
     MaterialTheme {
-        //SlideInImageScreen(modifier = Modifier.fillMaxSize())
         TimeAtLocationScreen(modifier = Modifier.fillMaxSize())
     }
 }

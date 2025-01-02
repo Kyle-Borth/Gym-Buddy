@@ -10,7 +10,6 @@ import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,24 +17,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.rabidrabbit.model.Country
-import com.rabidrabbit.utility.StringUtilities
-import kotlinx.datetime.TimeZone
+import com.rabidrabbit.ui.utility.StringUtilities
+import gymbuddy.composeapp.generated.resources.Res
+import gymbuddy.composeapp.generated.resources.current_time
+import gymbuddy.composeapp.generated.resources.select_location
+import gymbuddy.composeapp.generated.resources.time_at_location
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun TimeAtLocationScreen(modifier: Modifier = Modifier) {
     var showCountries by remember { mutableStateOf(false) }
     var selectedCountry by remember { mutableStateOf<Country?>(null) }
-    val timeAtLocation by remember(selectedCountry) {
-        derivedStateOf {
-            selectedCountry?.let {
-                "The current time in ${it.name} is ${StringUtilities.currentTime(it.zone)}"
-            } ?: "The current time is ${StringUtilities.currentTime(TimeZone.currentSystemDefault())}"
-        }
-    }
 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = timeAtLocation, modifier = Modifier.padding(PaddingNormal))
+        Text(
+            text = selectedCountry?.let {
+                stringResource(Res.string.time_at_location, it.name, StringUtilities.currentTime(it.zone))
+            } ?: stringResource(Res.string.current_time, StringUtilities.currentTime()),
+            modifier = Modifier.padding(PaddingNormal)
+        )
 
         Row {
             DropdownMenu(expanded = showCountries, onDismissRequest = { showCountries = false } ) {
@@ -61,7 +62,7 @@ fun TimeAtLocationScreen(modifier: Modifier = Modifier) {
         }
 
         Button(onClick = { showCountries = !showCountries }) {
-            Text("Select Location")
+            Text(text = stringResource(Res.string.select_location))
         }
     }
 }
