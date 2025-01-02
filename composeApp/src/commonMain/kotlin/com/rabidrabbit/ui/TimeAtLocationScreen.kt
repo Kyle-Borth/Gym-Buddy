@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,21 +42,22 @@ fun TimeAtLocationScreen(modifier: Modifier = Modifier) {
             DropdownMenu(expanded = showCountries, onDismissRequest = { showCountries = false } ) {
                 Country.all().forEach { country ->
                     DropdownMenuItem(
+                        text = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Image(
+                                    painter = painterResource(country.image),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(IconDimens.FlagSize).padding(end = PaddingSmall)
+                                )
+
+                                Text(country.name)
+                            }
+                        },
                         onClick = {
                             selectedCountry = country
                             showCountries = false
                         }
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Image(
-                                painter = painterResource(country.image),
-                                contentDescription = null,
-                                modifier = Modifier.size(IconDimens.FlagSize).padding(end = PaddingSmall)
-                            )
-
-                            Text(country.name)
-                        }
-                    }
+                    )
                 }
             }
         }
